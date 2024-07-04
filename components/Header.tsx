@@ -20,12 +20,14 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
       <div className="w-full mb-4 flex items-center justify-between">
         <div className="hidden md:flex gap-x-2 items-center">
           <button
+            aria-label="prev-page"
             onClick={() => router.back()}
             className="rounded-full bg-black flex items-center justify-center hover:opactiy-75 transition"
           >
             <RxCaretLeft size={36} className="text-white" />
           </button>
           <button
+            aria-label="next-page"
             onClick={() => router.forward()}
             className="rounded-full bg-black flex items-center justify-center hover:opactiy-75 transition"
           >
@@ -33,26 +35,38 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
           </button>
         </div>
         <div className="flex md:hidden gap-x-2 items-center">
-          <button className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75 transition">
+          <button
+            aria-label="home-btn"
+            className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75 transition"
+          >
             <HiHome className="text-black" size={20} />
           </button>
-          <button className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75 transition">
+          <button
+            aria-label="search-btn"
+            className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75 transition"
+          >
             <BiSearch className="text-black" size={20} />
           </button>
         </div>
         <div className="flex justify-between items-center gap-x-4">
           <>
             <div>
-              <Button className="bg-transparent text-neutral-300 font-medium">
+              <Button
+                className="bg-transparent text-neutral-300 font-medium"
+                aria-label="sign-up-btn"
+              >
                 Sign Up
               </Button>
             </div>
             <div>
-              <Button className="bg-white px-6 py-2">Log in</Button>
+              <Button className="bg-white px-6 py-2" aria-label="log-in-btn">
+                Log in
+              </Button>
             </div>
           </>
         </div>
       </div>
+      {children}
     </div>
   );
 };
