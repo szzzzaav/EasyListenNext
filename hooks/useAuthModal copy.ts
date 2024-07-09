@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface UploadModalStore {
+export interface UploadModalStore {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;

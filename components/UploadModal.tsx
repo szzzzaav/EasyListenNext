@@ -1,46 +1,45 @@
-"use client";
-
 import Modal from "@/hooks/Modal";
-import useUploadModal from "@/hooks/useUploadModal";
-import { useState } from "react";
+import useUploadModal from "@/hooks/useAuthModal copy";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
+import { useState } from "react";
 import Input from "./Input";
 import Button from "./Button";
 import Image from "next/image";
 
 const UploadModal = () => {
   const Upload = useUploadModal();
+  const onChangeModal = () => {
+    if (Upload.isOpen) {
+      reset();
+      return Upload.onClose();
+    }
+    if (!Upload.isOpen) {
+      return Upload.onOpen();
+    }
+  };
   const [isLoading, setIsLoading] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  const { reset, handleSubmit, register, getValues } = useForm<FieldValues>({
+  const { register, getValues, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
       title: "",
       author: "",
       song: null,
-      image: null,
       lyric: null,
+      image: null,
     },
   });
-  const onChange = () => {
-    if (!Upload.isOpen) {
-      reset();
-    }
-    if (Upload.isOpen) {
-      return Upload.onClose();
-    }
+  const onSubmit: SubmitHandler<FieldValues> = (values) => {
+    reset();
   };
-
-  const onSubmit: SubmitHandler<FieldValues> = async (value) => {};
-
   return (
     <div>
       <Modal
-        title="Add a Song"
-        description="Upload a mp3 file"
+        title="Add a song"
+        description="upload a mp3 file"
         isOpen={Upload.isOpen}
-        onChange={onChange}
+        onChange={onChangeModal}
       >
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -48,37 +47,26 @@ const UploadModal = () => {
         >
           <Input
             id="title"
-            {...register("title", { required: true })}
+            placeholder="song title"
             disabled={isLoading}
-            placeholder="Song title"
+            {...register("title", { required: true })}
           />
           <Input
             id="author"
-            {...register("author", { required: true })}
+            placeholder="song author"
             disabled={isLoading}
-            placeholder="Song author"
+            {...register("author", { required: true })}
           />
           <div>
-            <div>Select a song file</div>
-            <Input
-              id="song"
-              type="file"
-              accept=".mp3"
-              {...register("song", { required: true })}
-              disabled={isLoading}
-              placeholder="choose a mp3 file"
-            />
-          </div>
-          <div>
-            <div>Select a image</div>
+            <div>Select a song Cover</div>
             <Input
               id="image"
               type="file"
               accept="image/*"
-              {...register("image", { required: true })}
               disabled={isLoading}
+              {...register("image", { required: true })}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const file = e.target.files?.[0];
+                const file = e.target?.files?.[0];
                 if (file) {
                   setImageUrl(URL.createObjectURL(file));
                 }
@@ -86,52 +74,57 @@ const UploadModal = () => {
             />
           </div>
           <div>
-            <div>Select a lyric</div>
+            <div>Select a song File</div>
+            <Input
+              id="song"
+              type="file"
+              accept=".mp3"
+              disabled={isLoading}
+              {...register("song", { required: true })}
+            />
+          </div>
+          <div>
+            <div>Select a lyric File</div>
             <Input
               id="lyric"
               type="file"
               accept=".lrc"
-              {...register("lyric", { required: true })}
               disabled={isLoading}
+              {...register("lyric", { required: true })}
             />
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-row gap-4">
             <Button
-              disabled={isLoading}
               className="bg-orange-600"
-              onClick={() => {
-                setOpenPreview(!openPreview);
-              }}
+              onClick={() => setOpenPreview(true)}
             >
               Preview
             </Button>
-            <Button disabled={isLoading}>Submit</Button>
+            <Button>Create</Button>
           </div>
         </form>
       </Modal>
       <Modal
+        isOpen={openPreview}
+        onChange={() => setOpenPreview(false)}
         title={
-          getValues("title") ? getValues("title") : "please input song title"
+          getValues("title") ? getValues("title") : "Please input song title"
         }
         description={
-          getValues("author") ? getValues("author") : "please input song author"
+          getValues("author") ? getValues("author") : "Please input song author"
         }
-        isOpen={openPreview}
-        onChange={() => {
-          setOpenPreview(false);
-        }}
       >
-        {imageUrl ? (
+        {!imageUrl ? (
+          <div>Pleas upload an image</div>
+        ) : (
           <div className="w-[400px] h-[400px] relative">
             <Image
+              alt="Cover"
               src={imageUrl}
-              alt=""
               fill
-              className="rounded-lg bg-transparent object-cover"
-            />
+              className="object-cover rounded-2xl"
+            ></Image>
           </div>
-        ) : (
-          <div className="text-center">Please upload an image</div>
         )}
       </Modal>
     </div>
