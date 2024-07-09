@@ -6,6 +6,11 @@ import { BiSearch } from "react-icons/bi";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
 import Button from "./Button";
+import useAuthModal from "@/hooks/useAuthModal";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import useUser from "@/hooks/useUser";
+import { FaUserAlt } from "react-icons/fa";
+import toast from "react-hot-toast/headless";
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -14,7 +19,19 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ children, className }) => {
   const router = useRouter();
-  const handleLogout = () => {};
+  const authModal = useAuthModal();
+  const supabaseClient = useSupabaseClient();
+  const { user } = useUser();
+  const handleLogOut = async () => {
+    const { error } = await supabaseClient.auth.signOut();
+    // close playing songs
+    router.refresh();
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Logged out");
+    }
+  };
   return (
     <div className={twMerge(`h-fit bg-gradient-to-b from-indigo-600 p-6`)}>
       <div className="w-full mb-4 flex items-center justify-between">
@@ -49,21 +66,44 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
           </button>
         </div>
         <div className="flex justify-between items-center gap-x-4">
-          <>
-            <div>
+          {user ? (
+            <div className="flex gap-x-4 items-center ">
               <Button
-                className="bg-transparent text-neutral-300 font-medium"
-                aria-label="sign-up-btn"
+                aria-label="user-logout"
+                onClick={handleLogOut}
+                className="bg-white px-6 py-2"
               >
-                Sign Up
+                Logout
+              </Button>
+              <Button
+                onClick={() => router.push("/account")}
+                className="bg-white"
+              >
+                <FaUserAlt />
               </Button>
             </div>
-            <div>
-              <Button className="bg-white px-6 py-2" aria-label="log-in-btn">
-                Log in
-              </Button>
-            </div>
-          </>
+          ) : (
+            <>
+              <div>
+                <Button
+                  onClick={authModal.onOpen}
+                  className="bg-transparent text-neutral-300 font-medium"
+                  aria-label="sign-up-btn"
+                >
+                  Sign Up
+                </Button>
+              </div>
+              <div>
+                <Button
+                  onClick={authModal.onOpen}
+                  className="bg-white px-6 py-2"
+                  aria-label="log-in-btn"
+                >
+                  Log in
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </div>
       {children}
