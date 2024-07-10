@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 
 function useSearchSongs(title: string) {
   const { data, isFetching } = useQuery({
-    queryKey: ["userSongs", title],
+    queryKey: ["userSearchSongs", title],
     queryFn: () => getSongsByTitle(title),
   });
   return { data, isFetching };

@@ -6,7 +6,7 @@ import useAuthModal from "@/hooks/useAuthModal";
 import useUploadModal from "@/hooks/useUploadModal";
 import useSongsByUserId from "@/hooks/useSongsByUserId";
 import MediaItem from "./MediaItem";
-import { memo, useMemo } from "react";
+import { memo } from "react";
 
 interface LibraryProps {}
 

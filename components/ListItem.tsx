@@ -1,8 +1,12 @@
 "use client";
 
+import dynamic from "next/dynamic";
+const AuthModal = dynamic(() => import("@/components/AuthModal"));
+import useUser from "@/hooks/useUser";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaPlay } from "react-icons/fa";
+import useAuthModal from "@/hooks/useAuthModal";
 
 interface ListItemProps {
   image: string;
@@ -12,7 +16,10 @@ interface ListItemProps {
 
 const ListItem: React.FC<ListItemProps> = ({ image, name, href }) => {
   const router = useRouter();
+  const { user } = useUser();
+  const AuthModal = useAuthModal();
   const onClick = () => {
+    if (!user) return AuthModal.onOpen();
     router.push(href);
   };
   return (
