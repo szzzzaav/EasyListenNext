@@ -2,7 +2,10 @@ import supabase from "@/hooks/supabase";
 import { Songs } from "@/types";
 
 const getSongs = async (): Promise<Songs[]> => {
-  const { data, error } = await supabase.from("songs").select("*");
+  const { data, error } = await supabase
+    .from("songs")
+    .select("*")
+    .order("created_at", { ascending: false });
   if (error) {
     console.log(error);
     return [];

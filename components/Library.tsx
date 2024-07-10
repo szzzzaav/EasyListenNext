@@ -5,12 +5,13 @@ import useUser from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
 import useUploadModal from "@/hooks/useUploadModal";
 import useSongsByUserId from "@/hooks/useSongsByUserId";
+import MediaItem from "./MediaItem";
 
 interface LibraryProps {}
 
 const Library: React.FC<LibraryProps> = () => {
-  const { data: songs, isFetching } = useSongsByUserId();
   const { user } = useUser();
+  const { data: songs, isFetching } = useSongsByUserId();
   const AuthModal = useAuthModal();
   const UploadModal = useUploadModal();
   const onClick = () => {
@@ -31,7 +32,13 @@ const Library: React.FC<LibraryProps> = () => {
         />
       </div>
       <div className="flex flex-col gap-y-2 mt-4 px-3">
-        {isFetching ? <AiOutlineLoading className="animate-spin" /> : <></>}
+        {isFetching ? (
+          <AiOutlineLoading className="animate-spin" />
+        ) : (
+          songs?.map((item) => (
+            <MediaItem onClick={() => {}} key={item.id} data={item}></MediaItem>
+          ))
+        )}
       </div>
     </div>
   );

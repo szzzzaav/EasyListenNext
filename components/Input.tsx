@@ -2,8 +2,8 @@ import { ReactNode, RefCallback, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface InputProps {
-  id: string;
-  disabled: boolean;
+  id?: string;
+  disabled?: boolean;
   className?: string;
   type?: string;
   onChange: Function;

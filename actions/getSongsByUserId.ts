@@ -1,18 +1,11 @@
 import supabase from "@/hooks/supabase";
 import { Songs } from "@/types";
 
-const getSongsByUserId = async (): Promise<Songs[]> => {
-  const { data: sessionData, error: sessionError } =
-    await supabase.auth.getSession();
-  if (sessionError) {
-    console.log(sessionError);
-    return [];
-  }
-
+const getSongsByUserId = async (id: string | undefined): Promise<Songs[]> => {
   const { data, error } = await supabase
     .from("songs")
     .select("*")
-    .eq("user_id", sessionData?.session?.user?.id)
+    .eq("user_id", id)
     .order("created_at", { ascending: false });
   if (error) {
     console.log(error.message);

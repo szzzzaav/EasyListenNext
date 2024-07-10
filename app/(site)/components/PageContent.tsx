@@ -6,7 +6,6 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const PageContent = () => {
   const { data: songs, isFetching } = useSongs();
-  console.log(songs);
   if (isFetching) {
     return (
       <div className="flex flex-col h-full gap-4">
