@@ -4,6 +4,17 @@ export interface UserDetails {
   avatar_url?: string;
 }
 
+export interface Songs {
+  id: string;
+  user_id: string;
+  created_at: string;
+  title: string;
+  song_path: string;
+  image_path: string;
+  author: string;
+  lyric_path: string;
+}
+
 export interface Subscription {
   id: string;
   user_id: string;

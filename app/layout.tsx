@@ -6,6 +6,7 @@ import SupabaseProvider from "@/providers/supabaseProviders";
 import UserProvider from "@/providers/userProvider";
 import ModalProvider from "@/providers/ModalProvider";
 import ToasterProvider from "@/providers/ToasterProvider";
+import ReactQueryClientProvider from "@/providers/ReactQueryProvider";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
   description: "Listen to Music",
 };
 
-export default function RootLayout({
+export const revalidate = 0;
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -26,7 +29,9 @@ export default function RootLayout({
         <SupabaseProvider>
           <UserProvider>
             <ModalProvider />
-            <SideBar>{children}</SideBar>
+            <ReactQueryClientProvider>
+              <SideBar>{children}</SideBar>
+            </ReactQueryClientProvider>
           </UserProvider>
         </SupabaseProvider>
       </body>

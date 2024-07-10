@@ -1,7 +1,10 @@
 "use client";
 
-import AuthModal from "@/components/AuthModal";
-import UploadModal from "@/components/UploadModal";
+import dynamic from "next/dynamic";
+// import AuthModal from "@/components/AuthModal";
+// import UploadModal from "@/components/UploadModal";
+const AuthModal = dynamic(() => import("@/components/AuthModal"));
+const UploadModal = dynamic(() => import("@/components/UploadModal"));
 import { useState, useEffect } from "react";
 
 const ModalProvider = () => {
