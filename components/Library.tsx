@@ -6,10 +6,11 @@ import useAuthModal from "@/hooks/useAuthModal";
 import useUploadModal from "@/hooks/useUploadModal";
 import useSongsByUserId from "@/hooks/useSongsByUserId";
 import MediaItem from "./MediaItem";
+import { memo, useMemo } from "react";
 
 interface LibraryProps {}
 
-const Library: React.FC<LibraryProps> = () => {
+const Library: React.FC<LibraryProps> = memo(() => {
   const { user } = useUser();
   const { data: songs, isFetching } = useSongsByUserId();
   const AuthModal = useAuthModal();
@@ -42,6 +43,6 @@ const Library: React.FC<LibraryProps> = () => {
       </div>
     </div>
   );
-};
-
+});
+Library.displayName = "Library";
 export default Library;
