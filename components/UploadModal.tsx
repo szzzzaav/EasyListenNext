@@ -70,46 +70,37 @@ const UploadModal = () => {
 
       setIsLoading(true);
       const uid = uniqid();
-      const { data: songData, error: songError } = await supabaseClient.storage
-        .from("songs")
-        .upload(`songs-${songFile.name}-${uid}`, songFile, {
-          cacheControl: "3600",
-          // 允许更新
-          upsert: true,
-        });
-
-      if (songError) {
-        setIsLoading(false);
-        return toast.error("Failed song upload");
-      }
-
-      const { data: lyricData, error: lyricError } =
-        await supabaseClient.storage
+      const [songData, lyricData, imageData] = await Promise.all([
+        supabaseClient.storage
+          .from("songs")
+          .upload(`songs-${songFile.name}-${uid}`, songFile, {
+            cacheControl: "3600",
+            upsert: true,
+          }),
+        supabaseClient.storage
           .from("lyrics")
           .upload(`lyrics-${lyricFile.name}-${uid}`, lyricFile, {
             cacheControl: "3600",
-            // 允许更新
             upsert: true,
-          });
-
-      if (lyricError) {
-        console.log(lyricError);
-        setIsLoading(false);
-        return toast.error("Failed lyric upload");
-      }
-
-      const { data: imageData, error: imageError } =
-        await supabaseClient.storage
+          }),
+        supabaseClient.storage
           .from("images")
           .upload(`images-${imageFile.name}-${uid}`, imageFile, {
             cacheControl: "3600",
-            // 允许更新
             upsert: true,
-          });
-
-      if (imageError) {
+          }),
+      ]);
+      if (songData.error) {
         setIsLoading(false);
-        return toast.error("Cover lyric upload");
+        return toast.error("Failed song upload");
+      }
+      if (lyricData.error) {
+        setIsLoading(false);
+        return toast.error("Failed lyric upload");
+      }
+      if (imageData.error) {
+        setIsLoading(false);
+        return toast.error("Failed image upload");
       }
 
       const { error: supabaseError } = await supabaseClient
@@ -118,9 +109,9 @@ const UploadModal = () => {
           user_id: user.id,
           title: values.title,
           author: values.author,
-          image_path: imageData.path,
-          song_path: songData.path,
-          lyric_path: lyricData.path,
+          image_path: imageData.data.path,
+          song_path: songData.data.path,
+          lyric_path: lyricData.data.path,
         });
 
       if (supabaseError) {
@@ -134,6 +125,7 @@ const UploadModal = () => {
       reset();
       Upload.onClose();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);

@@ -4,7 +4,6 @@ import LikeButton from "@/components/LikeButton";
 import MediaItem from "@/components/MediaItem";
 import useLikedSongs from "@/hooks/useLikedSongs";
 import useUser from "@/hooks/useUser";
-import { Songs } from "@/types";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -21,10 +20,11 @@ const LikedContent = () => {
 
   if (isFetching) {
     return (
-      <div className="flex flex-col h-full gap-4">
+      <div className="flex flex-col h-full gap-4 p-10">
         <SkeletonTheme baseColor="#292929" highlightColor="#595959">
           <Skeleton count={1} className="w-full h-[100px]" />
-          <Skeleton count={3} className="w-full h-full" />
+          <Skeleton count={1} className="w-full h-full mb-10" />
+          <Skeleton count={1} className="w-full h-full mb-10" />
         </SkeletonTheme>
       </div>
     );
