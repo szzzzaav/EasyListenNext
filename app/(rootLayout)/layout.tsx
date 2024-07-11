@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
 import SideBar from "@/components/Sidebar";
 import SupabaseProvider from "@/providers/supabaseProviders";
 import UserProvider from "@/providers/userProvider";

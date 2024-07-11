@@ -70,37 +70,45 @@ const UploadModal = () => {
 
       setIsLoading(true);
       const uid = uniqid();
-      const [songData, lyricData, imageData] = await Promise.all([
-        supabaseClient.storage
-          .from("songs")
-          .upload(`songs-${songFile.name}-${uid}`, songFile, {
-            cacheControl: "3600",
-            upsert: true,
-          }),
-        supabaseClient.storage
-          .from("lyrics")
-          .upload(`lyrics-${lyricFile.name}-${uid}`, lyricFile, {
-            cacheControl: "3600",
-            upsert: true,
-          }),
-        supabaseClient.storage
-          .from("images")
-          .upload(`images-${imageFile.name}-${uid}`, imageFile, {
-            cacheControl: "3600",
-            upsert: true,
-          }),
+
+      const uploadWorker = (Worker: Worker, file: File, uid: string) => {
+        return new Promise<{ success: boolean; path?: string; error?: string }>(
+          (resolve) => {
+            Worker.onmessage = (event) => resolve(event.data);
+            Worker.postMessage({ file, uid });
+          }
+        );
+      };
+
+      const songWorker = new Worker(
+        new URL("@/workers/uploadSongWorker.ts", import.meta.url)
+      );
+      const lyricWorker = new Worker(
+        new URL("@/workers/uploadLyricWorker.ts", import.meta.url)
+      );
+      const imageWorker = new Worker(
+        new URL("@/workers/uploadImageWorker.ts", import.meta.url)
+      );
+
+      const [songResult, lyricResult, imageResult] = await Promise.all([
+        uploadWorker(songWorker, songFile, uid),
+        uploadWorker(lyricWorker, lyricFile, uid),
+        uploadWorker(imageWorker, imageFile, uid),
       ]);
-      if (songData.error) {
+
+      if (!songResult.success) {
         setIsLoading(false);
-        return toast.error("Failed song upload");
+        return toast.error(songResult.error || "Song upload failed");
       }
-      if (lyricData.error) {
+
+      if (!lyricResult.success) {
         setIsLoading(false);
-        return toast.error("Failed lyric upload");
+        return toast.error(lyricResult.error || "Lyric upload failed");
       }
-      if (imageData.error) {
+
+      if (!imageResult.success) {
         setIsLoading(false);
-        return toast.error("Failed image upload");
+        return toast.error(imageResult.error || "Image upload failed");
       }
 
       const { error: supabaseError } = await supabaseClient
@@ -109,9 +117,9 @@ const UploadModal = () => {
           user_id: user.id,
           title: values.title,
           author: values.author,
-          image_path: imageData.data.path,
-          song_path: songData.data.path,
-          lyric_path: lyricData.data.path,
+          image_path: imageResult.path,
+          song_path: songResult.path,
+          lyric_path: lyricResult.path,
         });
 
       if (supabaseError) {
