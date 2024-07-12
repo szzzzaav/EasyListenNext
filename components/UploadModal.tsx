@@ -10,6 +10,7 @@ import useUser from "@/hooks/useUser";
 import uniqid from "uniqid";
 import { useRouter } from "next/navigation";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import supabase from "@/hooks/supabase";
 
 const UploadModal = () => {
   const Upload = useUploadModal();
@@ -111,16 +112,14 @@ const UploadModal = () => {
         return toast.error(imageResult.error || "Image upload failed");
       }
 
-      const { error: supabaseError } = await supabaseClient
-        .from("songs")
-        .insert({
-          user_id: user.id,
-          title: values.title,
-          author: values.author,
-          image_path: imageResult.path,
-          song_path: songResult.path,
-          lyric_path: lyricResult.path,
-        });
+      const { error: supabaseError } = await supabase.from("songs").insert({
+        user_id: user.id,
+        title: values.title,
+        author: values.author,
+        image_path: imageResult.path,
+        song_path: songResult.path,
+        lyric_path: lyricResult.path,
+      });
       console.log(4);
       if (supabaseError) {
         setIsLoading(false);
