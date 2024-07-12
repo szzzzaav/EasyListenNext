@@ -15,7 +15,7 @@ self.onmessage = async (event) => {
       throw new Error("Failed song upload");
     }
 
-    self.postMessage({ success: true, lyricPath: data.path });
+    self.postMessage({ success: true, path: data.path });
   } catch (error) {
     self.postMessage({ success: false, error });
   }

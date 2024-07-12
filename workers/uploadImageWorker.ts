@@ -14,7 +14,7 @@ self.onmessage = async (event) => {
       throw new Error("Failed image upload");
     }
 
-    self.postMessage({ success: true, imagePath: data.path });
+    self.postMessage({ success: true, path: data.path });
   } catch (error) {
     self.postMessage({ success: false, error: error });
   }
