@@ -1,8 +1,7 @@
 import supabase from "@/hooks/supabase";
 
 self.onmessage = async (event) => {
-  const { imageFile, uid } = event.data;
-  console.log("imageWorker" + imageFile + imageFile.name);
+  const { file: imageFile, uid } = event.data;
   try {
     const { data, error } = await supabase.storage
       .from("images")

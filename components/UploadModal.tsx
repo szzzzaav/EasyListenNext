@@ -50,7 +50,6 @@ const UploadModal = () => {
       const lyricFile = values.lyric?.[0];
       const title = values.title;
       const author = values.author;
-      console.log(1);
       if (!user) {
         return toast.error("without user,please log in");
       }
@@ -73,7 +72,6 @@ const UploadModal = () => {
 
       setIsLoading(true);
       const uid = uniqid();
-      console.log(2);
       const uploadWorker = (Worker: Worker, file: File, uid: string) => {
         return new Promise<{ success: boolean; path?: string; error?: string }>(
           (resolve) => {
@@ -84,27 +82,19 @@ const UploadModal = () => {
       };
 
       const songWorker = new Worker(
-        new URL("../workers/uploadSongWorker.ts", import.meta.url)
+        new URL("@/workers/uploadSongWorker.ts", import.meta.url)
       );
       const lyricWorker = new Worker(
-        new URL("../workers/uploadLyricWorker.ts", import.meta.url)
+        new URL("@/workers/uploadLyricWorker.ts", import.meta.url)
       );
       const imageWorker = new Worker(
-        new URL("../workers/uploadImageWorker.ts", import.meta.url)
+        new URL("@/workers/uploadImageWorker.ts", import.meta.url)
       );
-
       const [songResult, lyricResult, imageResult] = await Promise.all([
         uploadWorker(songWorker, songFile, uid),
         uploadWorker(lyricWorker, lyricFile, uid),
         uploadWorker(imageWorker, imageFile, uid),
       ]);
-      console.log(3);
-      console.log("new");
-      console.log(window.Worker);
-      console.log("res");
-      console.log(songResult);
-      console.log(lyricResult);
-      console.log(imageResult);
       if (!songResult.success) {
         setIsLoading(false);
         return toast.error(songResult.error || "Song upload failed");

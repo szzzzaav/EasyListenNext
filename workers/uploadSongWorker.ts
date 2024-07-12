@@ -1,8 +1,7 @@
 import supabase from "@/hooks/supabase";
 
 self.onmessage = async (event) => {
-  const { songFile, uid } = event.data;
-  console.log("songWorker" + songFile + songFile.name);
+  const { file: songFile, uid } = event.data;
 
   try {
     const { data, error } = await supabase.storage
