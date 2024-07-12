@@ -99,6 +99,10 @@ const UploadModal = () => {
         uploadWorker(imageWorker, imageFile, uid),
       ]);
       console.log(3);
+      console.log("new");
+      console.log(songResult);
+      console.log(lyricResult);
+      console.log(imageResult);
       if (!songResult.success) {
         setIsLoading(false);
         return toast.error(songResult.error || "Song upload failed");
