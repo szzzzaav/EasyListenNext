@@ -42,8 +42,10 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, color }) => {
 
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
   const handleLike = async () => {
-    console.log(user);
-    if (!user) return authModal?.onOpen();
+    if (!user) {
+      toast.error("You can't Like song without log in,please log in");
+      return authModal?.onOpen();
+    }
     if (isLiked) {
       const { error } = await supabaseClient
         .from("liked_songs")
