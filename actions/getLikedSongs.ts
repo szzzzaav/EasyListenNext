@@ -9,7 +9,6 @@ const getLikedSongs = async (id: string | undefined): Promise<Songs[]> => {
     .eq("user_id", id)
     .order("created_at", { ascending: false });
   if (error) {
-    console.log(error);
     return [];
   }
   if (!data) {
