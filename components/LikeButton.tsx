@@ -10,9 +10,10 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 interface LikeButtonProps {
   songId: string;
+  color?: string;
 }
 
-const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
+const LikeButton: React.FC<LikeButtonProps> = ({ songId, color }) => {
   const router = useRouter();
   const { supabaseClient } = useSessionContext();
   const authModal = useAuthModal();
@@ -41,7 +42,8 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
 
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
   const handleLike = async () => {
-    if (!user) return authModal.onOpen();
+    console.log(user);
+    if (!user) return authModal?.onOpen();
     if (isLiked) {
       const { error } = await supabaseClient
         .from("liked_songs")
@@ -70,7 +72,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
   };
   return (
     <button onClick={handleLike} className="hover:opacity-75 transition">
-      <Icon color={isLiked ? "#22c" : "white"} size={25} />
+      <Icon color={isLiked ? (color ? color : "#22c") : "white"} size={25} />
     </button>
   );
 };

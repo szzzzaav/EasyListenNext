@@ -7,6 +7,7 @@ import useUploadModal from "@/hooks/useUploadModal";
 import useSongsByUserId from "@/hooks/useSongsByUserId";
 import MediaItem from "./MediaItem";
 import { memo } from "react";
+import useChannel from "@/hooks/useChannel";
 
 interface LibraryProps {}
 
@@ -19,6 +20,8 @@ const Library: React.FC<LibraryProps> = memo(() => {
     if (!user) return AuthModal.onOpen();
     return UploadModal.onOpen();
   };
+  const { channel, sendMsg } = useChannel();
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between px-5 pt-4">
@@ -37,7 +40,24 @@ const Library: React.FC<LibraryProps> = memo(() => {
           <AiOutlineLoading className="animate-spin" />
         ) : (
           songs?.map((item) => (
-            <MediaItem onClick={() => {}} key={item.id} data={item}></MediaItem>
+            <MediaItem
+              onClick={() => {
+                if (!item) return null;
+                if (!channel?.listeners?.size) {
+                  window.open(`/player?id=${item.id}`);
+                } else {
+                  sendMsg(
+                    {
+                      type: "data",
+                      data: item,
+                    },
+                    channel
+                  );
+                }
+              }}
+              key={item.id}
+              data={item}
+            ></MediaItem>
           ))
         )}
       </div>

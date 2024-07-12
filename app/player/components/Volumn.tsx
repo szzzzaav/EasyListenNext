@@ -2,24 +2,27 @@
 
 import { useState } from "react";
 import { HiMiniSpeakerWave, HiMiniSpeakerXMark } from "react-icons/hi2";
-import WIDTH from "./PlayerConfig";
-
-const volumnRangeWidth = WIDTH * 0.9375;
+import useWindowWidth from "./PlayerConfig";
+import { useAudioContext } from "@/hooks/useAudio";
 
 const Volumn = () => {
   const [mute, setMute] = useState(false);
   const [volumn, setVolumn] = useState(70);
-
+  const WIDTH = useWindowWidth();
+  const { volumnRef, currentMusic } = useAudioContext();
+  const volumnRangeWidth = WIDTH * 0.9375;
+  let width = (volumn / 100) * volumnRangeWidth;
   return (
     <div
-      className={`flex relative items-center justify-between gap-[5px] w-[${WIDTH}px] h-[20px]`}
+      className={`flex relative items-center justify-between gap-[5px] min-w-[450px] w-[${WIDTH}px] h-[20px]`}
     >
       {!mute && (
         <HiMiniSpeakerWave
           size={20}
+          className="cursor-pointer"
           onClick={() => {
             setMute(true);
-            // TODO:setMusicVolumnToZero
+            currentMusic?.musicObject.volumn(0);
           }}
         />
       )}
@@ -28,7 +31,7 @@ const Volumn = () => {
           size={20}
           onClick={() => {
             setMute(false);
-            // TODO:setMusicVolumn
+            currentMusic?.musicObject.volumn(Number(volumn) / 100);
           }}
         />
       )}
@@ -40,15 +43,29 @@ const Volumn = () => {
               className="absolute w-full h-[5px] right-0 bg-[#c9c9c9] rounded-[2px]"
               style={{ top: "calc(50% - 2.5px)" }}
             ></div>
-            <div className="relative z-10 h-[5px] bg-[#fff] rounded-[2px]"></div>
+            <div
+              className="relative z-10 h-[5px] bg-[#fff] rounded-[2px]"
+              style={{ width: `${width}px` }}
+            ></div>
           </div>
 
           {/* StyledRange */}
           <input
+            ref={volumnRef}
             type="range"
             max={100}
             min={0}
-            value={10}
+            value={mute ? 0 : volumn}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              if (mute) {
+                setMute(false);
+              }
+              setVolumn(Number(e.target.value));
+              if (Number(e.target.value) === 0) {
+                setMute(true);
+              }
+              currentMusic?.musicObject.volumn(Number(e.target.value) / 100);
+            }}
             className="relative z-10 w-full h-full appearance-none m-0 outline-none bg-transparent [&::-webkit-slider-runnable-track]:bg-transparent
             [&::-webkit-slider-container]:bg-transparent
             [&::-webkit-slider-thumb]:appearance-none
