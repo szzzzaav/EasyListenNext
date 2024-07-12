@@ -113,7 +113,7 @@ const UploadModal = () => {
         setIsLoading(false);
         return toast.error(imageResult.error || "Image upload failed");
       }
-
+      console.log(4);
       const { error: supabaseError } = await supabase.from("songs").insert({
         user_id: user.id,
         title: values.title,
@@ -122,7 +122,7 @@ const UploadModal = () => {
         song_path: songResult.path,
         lyric_path: lyricResult.path,
       });
-      console.log(4);
+      console.log(5);
       if (supabaseError) {
         setIsLoading(false);
         return toast.error(supabaseError.message);
