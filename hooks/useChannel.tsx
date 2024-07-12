@@ -37,7 +37,7 @@ function useChannel(role: string = "consumer", initial: any = null) {
         if (!channel.id) channel.id = createId();
         if (!channel.listeners) channel.listeners = new Set();
         sendMsg({ type: "create", role }, channel);
-        window.addEventListener("unload", function () {
+        window.addEventListener("beforeunload", function () {
           sendMsg({ type: "delete" }, channel);
         });
         channel.addEventListener("message", function (e) {

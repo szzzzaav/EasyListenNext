@@ -5,6 +5,7 @@ import { Songs } from "@/types";
 import { useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import NextImage from "next/image";
+import LikeButton from "./LikeButton";
 
 interface MediaItemProps {
   data: Songs;

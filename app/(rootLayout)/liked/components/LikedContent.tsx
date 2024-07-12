@@ -2,6 +2,7 @@
 
 import LikeButton from "@/components/LikeButton";
 import MediaItem from "@/components/MediaItem";
+import useChannel from "@/hooks/useChannel";
 import useLikedSongs from "@/hooks/useLikedSongs";
 import useUser from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
@@ -10,6 +11,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const LikedContent = () => {
   const router = useRouter();
+  const { channel, sendMsg } = useChannel();
   const { isLoading, user } = useUser();
   const { data: songs, isFetching } = useLikedSongs();
   useEffect(() => {
@@ -43,7 +45,23 @@ const LikedContent = () => {
       {songs?.map((song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1">
-            <MediaItem onClick={() => {}} data={song} />
+            <MediaItem
+              onClick={() => {
+                if (!song) return null;
+                if (!channel?.listeners?.size) {
+                  window.open(`/player?id=${song.id}`);
+                } else {
+                  sendMsg(
+                    {
+                      type: "data",
+                      data: song,
+                    },
+                    channel
+                  );
+                }
+              }}
+              data={song}
+            />
           </div>
           <LikeButton songId={song.id} />
         </div>
