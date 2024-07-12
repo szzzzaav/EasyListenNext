@@ -84,13 +84,13 @@ const UploadModal = () => {
       };
 
       const songWorker = new Worker(
-        new URL("@/workers/uploadSongWorker.ts", import.meta.url)
+        new URL("../workers/uploadSongWorker.ts", import.meta.url)
       );
       const lyricWorker = new Worker(
-        new URL("@/workers/uploadLyricWorker.ts", import.meta.url)
+        new URL("../workers/uploadLyricWorker.ts", import.meta.url)
       );
       const imageWorker = new Worker(
-        new URL("@/workers/uploadImageWorker.ts", import.meta.url)
+        new URL("../workers/uploadImageWorker.ts", import.meta.url)
       );
 
       const [songResult, lyricResult, imageResult] = await Promise.all([
@@ -100,6 +100,8 @@ const UploadModal = () => {
       ]);
       console.log(3);
       console.log("new");
+      console.log(window.Worker);
+      console.log("res");
       console.log(songResult);
       console.log(lyricResult);
       console.log(imageResult);
