@@ -40,7 +40,7 @@ const Lyric = () => {
               }}
               key={"lyric" + idx}
             >
-              {e}
+              {"  " + e}
             </div>
           );
         })}

@@ -2,7 +2,6 @@
 
 import { useAudioContext } from "@/hooks/useAudio";
 import { useCallback } from "react";
-import useWindowWidth from "./PlayerConfig";
 
 // 可视化
 
@@ -11,7 +10,7 @@ interface VisualProgressProps {
 }
 
 const VisualProgress: React.FC<VisualProgressProps> = ({ useControl }) => {
-  const WIDTH = useWindowWidth();
+  const WIDTH = 450;
   const { visualStageRef, progressRef, progressBgRef } = useAudioContext();
   const stageElGenerate = useCallback(function (
     length: number,
