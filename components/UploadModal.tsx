@@ -47,7 +47,7 @@ const UploadModal = () => {
       const lyricFile = values.lyric?.[0];
       const title = values.title;
       const author = values.author;
-
+      console.log(1);
       if (!user) {
         return toast.error("without user,please log in");
       }
@@ -70,7 +70,7 @@ const UploadModal = () => {
 
       setIsLoading(true);
       const uid = uniqid();
-
+      console.log(2);
       const uploadWorker = (Worker: Worker, file: File, uid: string) => {
         return new Promise<{ success: boolean; path?: string; error?: string }>(
           (resolve) => {
@@ -95,7 +95,7 @@ const UploadModal = () => {
         uploadWorker(lyricWorker, lyricFile, uid),
         uploadWorker(imageWorker, imageFile, uid),
       ]);
-
+      console.log(3);
       if (!songResult.success) {
         setIsLoading(false);
         return toast.error(songResult.error || "Song upload failed");
@@ -121,7 +121,7 @@ const UploadModal = () => {
           song_path: songResult.path,
           lyric_path: lyricResult.path,
         });
-
+      console.log(4);
       if (supabaseError) {
         setIsLoading(false);
         return toast.error(supabaseError.message);

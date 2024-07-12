@@ -16,7 +16,7 @@ const ControlProgress: React.FC<ControlProgressProps> = ({
   setProgress,
   musicLen,
 }) => {
-  const WIDTH = useWindowWidth();
+  const WIDTH = 550 * 0.9;
   const { currentMusic, dispatch, play, firstLoading } = useAudioContext();
   const bgWidth = (progress * WIDTH) / 100;
   return (
@@ -51,7 +51,6 @@ const ControlProgress: React.FC<ControlProgressProps> = ({
         min={0}
         value={progress}
         onChange={(e) => {
-          // e.preventDefault();
           setProgress(e.target.value);
         }}
         disabled={firstLoading}
