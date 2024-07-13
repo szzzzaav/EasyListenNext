@@ -8,7 +8,7 @@ import { useAudioContext } from "@/hooks/useAudio";
 const Volumn = () => {
   const [mute, setMute] = useState(false);
   const [volumn, setVolumn] = useState(70);
-  const WIDTH = 450;
+  const WIDTH = useWindowWidth();
   const { volumnRef, currentMusic } = useAudioContext();
   const volumnRangeWidth = WIDTH * 0.9375;
   let width = (volumn / 100) * volumnRangeWidth;

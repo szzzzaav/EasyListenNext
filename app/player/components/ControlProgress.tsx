@@ -16,7 +16,7 @@ const ControlProgress: React.FC<ControlProgressProps> = ({
   setProgress,
   musicLen,
 }) => {
-  const WIDTH = 550 * 0.9;
+  const WIDTH = useWindowWidth();
   const { currentMusic, dispatch, play, firstLoading } = useAudioContext();
   const bgWidth = (progress * WIDTH) / 100;
   return (
@@ -55,6 +55,7 @@ const ControlProgress: React.FC<ControlProgressProps> = ({
         }}
         disabled={firstLoading}
         onMouseUp={() => {
+          console.log("---------------jumped-----------------");
           if (!play) dispatch({ type: "play" });
           currentMusic?.musicObject?.jump(
             (progress / 100) * musicLen ?? 0,

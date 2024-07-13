@@ -1,4 +1,4 @@
-const WIDTH = 450;
+let WIDTH = 450;
 
 export class AudioControlObject {
   AudioContext;

@@ -8,17 +8,13 @@ import { twMerge } from "tailwind-merge";
 const RightStage = () => {
   const { openLyric } = useAudioContext();
   return (
-    <>
-      {openLyric && (
-        <StyledStage
-          className={twMerge(
-            "min-w-[55%]  relative bg-transparent z-[98] h-[90%] "
-          )}
-        >
-          <Lyric />
-        </StyledStage>
-      )}
-    </>
+    <StyledStage
+      className={`min-w-[55%] relative z-[98] h-[90%] ${
+        !openLyric ? "hidden" : ""
+      }`}
+    >
+      <Lyric />
+    </StyledStage>
   );
 };
 
