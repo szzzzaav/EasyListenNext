@@ -11,7 +11,7 @@ interface VisualProgressProps {
 }
 
 const VisualProgress: React.FC<VisualProgressProps> = ({ useControl }) => {
-  const WIDTH = useWindowWidth();
+  const WIDTH = 450;
   const { visualStageRef, progressRef, progressBgRef } = useAudioContext();
   const stageElGenerate = useCallback(function (
     length: number,
@@ -44,7 +44,7 @@ const VisualProgress: React.FC<VisualProgressProps> = ({ useControl }) => {
             top: "calc(50% - 1.5px)",
           }}
         >
-          {stageElGenerate(WIDTH, 3, WIDTH > 450 ? 50 : 30)}
+          {stageElGenerate(WIDTH, 3, 50)}
         </div>
 
         <div
