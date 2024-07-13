@@ -44,7 +44,7 @@ const VisualProgress: React.FC<VisualProgressProps> = ({ useControl }) => {
             top: "calc(50% - 1.5px)",
           }}
         >
-          {stageElGenerate(WIDTH, 3, WIDTH >= 400 ? 50 : 30)}
+          {stageElGenerate(WIDTH, 3, WIDTH > 450 ? 50 : 30)}
         </div>
 
         <div
