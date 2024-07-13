@@ -9,7 +9,7 @@ const RightStage = () => {
   const { openLyric } = useAudioContext();
   return (
     <StyledStage
-      className={`min-w-[55%] relative z-[98] h-[90%] ${
+      className={`min-w-[55%] relative z-[98] h-[85%] ${
         !openLyric ? "hidden" : ""
       }`}
     >

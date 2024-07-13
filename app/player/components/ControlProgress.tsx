@@ -55,7 +55,6 @@ const ControlProgress: React.FC<ControlProgressProps> = ({
         }}
         disabled={firstLoading}
         onMouseUp={() => {
-          console.log("---------------jumped-----------------");
           if (!play) dispatch({ type: "play" });
           currentMusic?.musicObject?.jump(
             (progress / 100) * musicLen ?? 0,

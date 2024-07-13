@@ -9,8 +9,10 @@ const Lyric = () => {
     <>
       <div
         ref={lyricStageRef}
-        className="absolute w-[54vw] h-[88vh] overflow-hidden"
+        className="absolute w-[54vw] h-[800px]  overflow-hidden "
         style={{
+          maskImage:
+            "linear-gradient(0deg,transparent,#d8d8d8 20%,#b5b5b5 80%,transparent)",
           transition: "all 1s cubic-bezier(0.075, 0.82, 0.165, 1)",
           animation: "stage_appear 0.3s ease-in-out 1 forwards",
         }}
