@@ -60,6 +60,7 @@ export class lyricObject {
   showlryonlrcstage(time, className) {
     if (!this.lrcTime?.length) return;
     let index = this.binarySearch(time) + this.offset;
+    if (index <= 4) return;
     if (!this.lrcstage.childNodes[index]?.classList?.contains(`${className}`)) {
       this.lrcstage.childNodes[index].classList.add(`${className}`);
       this.lrcstage.childNodes[index].scrollIntoView({
