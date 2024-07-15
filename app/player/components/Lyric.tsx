@@ -46,6 +46,17 @@ const Lyric = () => {
               </div>
             );
           })}
+        {Array.from({ length: 4 }).map((_, idx) => {
+          return (
+            <div
+              className="relative block z-[-8] min-w-[600px] min-h-[90px] text-[2rem] leading-[30px] h-auto text-[#d4d4d4] font-semibold break-words"
+              style={{
+                transition: "all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1)",
+              }}
+              key={"placehoder" + idx}
+            ></div>
+          );
+        })}
       </div>
     </>
   );
