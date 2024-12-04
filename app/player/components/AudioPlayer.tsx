@@ -15,11 +15,17 @@ interface AudioPlayerProps {
   isHidden: boolean;
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ isHidden }) => {
+const AudioPlayer: React.FC<
+  AudioPlayerProps
+> = ({ isHidden }) => {
   return (
     <div
       className="relative flex items-center justify-center w-full h-[100vh] overflow-hidden min-w-[1000px] flex-col flex-shrink-0  md:flex-row transition-all"
-      style={{ cursor: isHidden ? "none" : "auto" }}
+      style={{
+        cursor: isHidden
+          ? "none"
+          : "auto",
+      }}
     >
       <Bg />
       {/* LeftStage */}
