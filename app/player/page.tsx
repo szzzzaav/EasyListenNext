@@ -12,17 +12,21 @@ interface SearchProps {
 }
 
 export const metadata: Metadata = {
-  title: "Easy-Listen-Player",
+  title: "SonarCraft-Player",
   description: "Listen to Music",
 };
 
-const Player = ({ searchParams }: SearchProps) => {
+const Player = ({
+  searchParams,
+}: SearchProps) => {
   return (
     <SupabaseProvider>
       <UserProvider>
         <ReactQueryClientProvider>
           <AudioContextProvider>
-            <PlayerContent id={searchParams.id} />
+            <PlayerContent
+              id={searchParams.id}
+            />
           </AudioContextProvider>
         </ReactQueryClientProvider>
       </UserProvider>

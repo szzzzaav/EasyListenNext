@@ -72,18 +72,19 @@ const Bg = () => {
             <filter id="goo">
               <feGaussianBlur
                 in="SourceGraphic"
-                stdDeviation="10"
+                stdDeviation="20"
                 result="blur"
               ></feGaussianBlur>
               <feColorMatrix
                 in="blur"
                 mode="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -9"
                 result="goo"
               ></feColorMatrix>
               <feBlend
                 in="SourceGraphic"
                 in2="goo"
+                mode="soft-light"
               ></feBlend>
             </filter>
           </defs>

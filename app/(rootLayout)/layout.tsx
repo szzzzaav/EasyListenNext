@@ -8,10 +8,12 @@ import ModalProvider from "@/providers/ModalProvider";
 import ToasterProvider from "@/providers/ToasterProvider";
 import ReactQueryClientProvider from "@/providers/ReactQueryProvider";
 
-const font = Figtree({ subsets: ["latin"] });
+const font = Figtree({
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
-  title: "Easy-Listen",
+  title: "SonarCraft",
   description: "Listen to Music",
 };
 
@@ -30,7 +32,9 @@ export default async function RootLayout({
           <UserProvider>
             <ModalProvider />
             <ReactQueryClientProvider>
-              <SideBar>{children}</SideBar>
+              <SideBar>
+                {children}
+              </SideBar>
             </ReactQueryClientProvider>
           </UserProvider>
         </SupabaseProvider>
