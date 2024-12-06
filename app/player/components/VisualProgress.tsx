@@ -2,60 +2,78 @@
 
 import { useAudioContext } from "@/hooks/useAudio";
 import { useCallback } from "react";
-import useWindowWidth from "./PlayerConfig";
-
-// 可视化
 
 interface VisualProgressProps {
-  useControl: any;
+  useControl: boolean;
 }
 
-const VisualProgress: React.FC<VisualProgressProps> = ({ useControl }) => {
-  const WIDTH = 450;
-  const { visualStageRef, progressRef, progressBgRef } = useAudioContext();
-  const stageElGenerate = useCallback(function (
-    length: number,
-    elLength: number,
-    count: number
-  ) {
-    const dis = (length - count * elLength) / (count - 1);
-    return Array.from({ length: count }).map((_, i) => {
-      return (
-        <div
-          className={`stageEl absolute bottom-[0.8px] -z-[1px] w-[3px] rounded-[2px] bg-[#cdcdcd] border-none scale-[1.01]`}
-          key={`stgeEl${i}`}
-          style={{ left: `${i * elLength + i * dis}px` }}
-        ></div>
-      );
-    });
-  },
-  []);
+const VisualProgress: React.FC<
+  VisualProgressProps
+> = ({ useControl }) => {
+  const {
+    visualStageRef,
+    progressRef,
+    progressBgRef,
+  } = useAudioContext();
+
+  const stageElGenerate = useCallback(
+    function (count: number) {
+      return Array.from({
+        length: count,
+      }).map((_, i) => {
+        return (
+          <div
+            className="stageEl absolute bottom-[0.8px] -z-[1px] w-[3px] rounded-[2px] bg-[#cdcdcd] border-none scale-[1.01]"
+            key={`stgeEl${i}`}
+            style={{
+              left: `${
+                (i * 100) / count
+              }%`,
+            }}
+          ></div>
+        );
+      });
+    },
+    []
+  );
+
   return (
     <>
       <div
         className="flex items-center justify-start absolute top-0 right-0 w-full h-full"
-        style={{ display: useControl ? "none" : "" }}
+        style={{
+          display: useControl
+            ? "none"
+            : "",
+        }}
       >
         <div
           ref={visualStageRef}
-          className={`absolute z-[1] flex items-center justify-between flex-shrink w-[${WIDTH}px] h-3[px] backdrop-blur-[1px]`}
+          className="absolute z-[1] flex items-center justify-between flex-shrink w-full h-3[px] backdrop-blur-[1px]"
           style={{
-            left: `calc(50% - ${WIDTH / 2}px)`,
             top: "calc(50% - 1.5px)",
           }}
         >
-          {stageElGenerate(WIDTH, 3, 50)}
+          {stageElGenerate(50)}
         </div>
 
         <div
           className="absolute h-[5px] w-full right-0 bg-[#c9c9c9] rounded-[2px]"
-          style={{ top: "calc(50% - 2.5px)" }}
-        ></div>
-
-        <div
-          className="relative z-[2px] h-[5px] bg-[#fff] rounded-[2px]"
-          ref={progressBgRef}
-        ></div>
+          style={{
+            top: "calc(50% - 2.5px)",
+          }}
+        >
+          <div
+            className="relative z-[2px] h-full bg-[#fff] rounded-[2px]"
+            ref={progressBgRef}
+            style={{
+              width: `${
+                progressRef?.current
+                  ?.value || 0
+              }%`,
+            }}
+          ></div>
+        </div>
       </div>
       <input
         className="relative z-10 w-full h-full appearance-none m-0 outline-none bg-transparent [&::-webkit-slider-runnable-track]:bg-transparent
@@ -73,9 +91,16 @@ const VisualProgress: React.FC<VisualProgressProps> = ({ useControl }) => {
         type="range"
         max={100}
         min={0}
-        value={progressRef?.current?.value || 0}
+        value={
+          progressRef?.current?.value ||
+          0
+        }
         readOnly
-        style={{ display: useControl ? "none" : "" }}
+        style={{
+          display: useControl
+            ? "none"
+            : "",
+        }}
       />
     </>
   );

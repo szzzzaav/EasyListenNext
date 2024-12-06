@@ -1,38 +1,52 @@
 "use client";
 
 import { useAudioContext } from "@/hooks/useAudio";
-import useWindowWidth from "./PlayerConfig";
 
 interface ControlProgressProps {
-  useControl: any;
-  progress: any;
-  setProgress: any;
-  musicLen: any;
+  useControl: boolean;
+  progress: number;
+  setProgress: (value: number) => void;
+  musicLen: number;
 }
 
-const ControlProgress: React.FC<ControlProgressProps> = ({
+const ControlProgress: React.FC<
+  ControlProgressProps
+> = ({
   useControl,
   progress,
   setProgress,
   musicLen,
 }) => {
-  const WIDTH = useWindowWidth();
-  const { currentMusic, dispatch, play, firstLoading } = useAudioContext();
-  const bgWidth = (progress * WIDTH) / 100;
+  const {
+    currentMusic,
+    dispatch,
+    play,
+    firstLoading,
+  } = useAudioContext();
+
   return (
     <>
       <div
         className="flex items-center justify-start absolute top-0 right-0 w-full h-full"
-        style={{ display: !useControl ? "none" : "" }}
+        style={{
+          display: !useControl
+            ? "none"
+            : "",
+        }}
       >
         <div
           className="absolute h-[5px] w-full right-0 bg-[#c9c9c9] rounded-[2px]"
-          style={{ top: "calc(50% - 2.5px)" }}
-        ></div>
-        <div
-          className="relative z-[2] h-[5px] bg-[#fff] rounded-[2px]"
-          style={{ width: `${bgWidth}px` }}
-        ></div>
+          style={{
+            top: "calc(50% - 2.5px)",
+          }}
+        >
+          <div
+            className="relative z-[2] h-full bg-[#fff] rounded-[2px]"
+            style={{
+              width: `${progress}%`,
+            }}
+          ></div>
+        </div>
       </div>
       <input
         className="relative z-10 w-full h-full appearance-none m-0 outline-none bg-transparent [&::-webkit-slider-runnable-track]:bg-transparent
@@ -51,17 +65,25 @@ const ControlProgress: React.FC<ControlProgressProps> = ({
         min={0}
         value={progress}
         onChange={(e) => {
-          setProgress(e.target.value);
+          setProgress(
+            Number(e.target.value)
+          );
         }}
         disabled={firstLoading}
         onMouseUp={() => {
-          if (!play) dispatch({ type: "play" });
+          if (!play)
+            dispatch({ type: "play" });
           currentMusic?.musicObject?.jump(
-            (progress / 100) * musicLen ?? 0,
+            (progress / 100) *
+              musicLen ?? 0,
             play ? true : false
           );
         }}
-        style={{ display: !useControl ? "none" : "" }}
+        style={{
+          display: !useControl
+            ? "none"
+            : "",
+        }}
       />
     </>
   );
