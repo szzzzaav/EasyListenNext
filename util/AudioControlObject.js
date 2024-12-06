@@ -30,6 +30,8 @@ export class AudioControlObject {
   visualStageEls;
 
   showlryonlrcstage;
+  playMode = "loop"; // 'loop' | 'next'
+
   constructor(
     ArrayBuffer,
     {
@@ -297,15 +299,10 @@ export class AudioControlObject {
         i
       ].style.height = `${h / 9}px`;
     }
-    if (
-      Math.abs(
-        time.toFixed(1) -
-          this.songLength.toFixed(1)
-      ) <= 0.3
-    ) {
+    if (time >= this.songLength - 0.1) {
       this.end = true;
-      console.log("stop");
-      this.AudioSource.stop();
+      this.handlePlayEnd();
+      return;
     }
     const curl =
       (100 * Number(time)) /
@@ -321,27 +318,35 @@ export class AudioControlObject {
     this.progressBgRef.current.style.width = `${curl}%`;
   }
 
+  handlePlayEnd() {
+    window.cancelAnimationFrame(
+      this.requestAnimate
+    );
+    this.AudioSource.stop();
+
+    if (this.playMode === "loop") {
+      this.reset();
+      this.volumn(this.volumnSet);
+      this.jump(0, false);
+    } else {
+      if (this.event) {
+        this.event();
+      }
+    }
+    this.end = false;
+  }
+
   setEvent({ e = null }) {
     this.event = e;
+    this.playMode = e ? "next" : "loop";
+
     this.AudioSource.removeEventListener(
       "ended",
       this.eventListener
     );
     this.eventListener = () => {
       if (!this.end) return;
-      this.end = false;
-      window.cancelAnimationFrame(
-        this.requestAnimate
-      );
-      this.reset();
-      this.volumn(this.volumnSet);
-      if (!e) {
-        console.log("loop");
-        this.jump(0, false);
-      } else {
-        console.log("next");
-        e?.();
-      }
+      this.handlePlayEnd();
     };
     this.AudioSource.addEventListener(
       "ended",
