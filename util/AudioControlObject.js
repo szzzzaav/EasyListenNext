@@ -32,6 +32,8 @@ export class AudioControlObject {
   showlryonlrcstage;
   playMode = "loop"; // 'loop' | 'next'
 
+  lyricStageRef;
+
   constructor(
     ArrayBuffer,
     {
@@ -40,10 +42,12 @@ export class AudioControlObject {
       progressBgRef,
       volumnRef,
       timeProgressRef,
+      lyricStageRef,
     }
   ) {
     this.AudioBuffer = ArrayBuffer;
     this.started = false;
+    this.lyricStageRef = lyricStageRef;
     return (async () => {
       await this.init({
         visualStageRef,
@@ -239,6 +243,10 @@ export class AudioControlObject {
 
   async jump(time, flag) {
     this.AudioContext.resume();
+    if (this.lyricStageRef?.current) {
+      this.lyricStageRef.current.style.transform =
+        "translateY(0px)";
+    }
     if (!flag) {
       this.AudioSource.start(0, time);
       this.startTimeStamp =
@@ -309,7 +317,8 @@ export class AudioControlObject {
       this.songLength;
     this.showlryonlrcstage?.(
       time,
-      "active"
+      "active",
+      time > 1
     );
     this.timeProgressRef.current.textContent =
       timestr;
@@ -323,7 +332,10 @@ export class AudioControlObject {
       this.requestAnimate
     );
     this.AudioSource.stop();
-
+    if (this.lyricStageRef?.current) {
+      this.lyricStageRef.current.style.transform =
+        "translateY(0px)";
+    }
     if (this.playMode === "loop") {
       this.reset();
       this.volumn(this.volumnSet);

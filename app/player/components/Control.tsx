@@ -1,5 +1,8 @@
 import { CiTextAlignCenter } from "react-icons/ci";
-import { Next, Pre } from "./PreAndNext";
+import {
+  Next,
+  Pre,
+} from "./PreAndNext";
 import { FaPlay } from "react-icons/fa";
 import Color from "./Color";
 import { useAudioContext } from "@/hooks/useAudio";
@@ -16,11 +19,16 @@ const Control = () => {
     progressBgRef,
     timeProgressRef,
     visualStageRef,
+    lyricStageRef,
   } = useAudioContext();
   return (
     <div className="flex items-center justify-around w-full ">
       <CiTextAlignCenter
-        onClick={() => dispatch({ type: "changeLyric" })}
+        onClick={() =>
+          dispatch({
+            type: "changeLyric",
+          })
+        }
         size={20}
         color={"#ffffff"}
         className="z-50 relative cursor-pointer"
@@ -33,16 +41,25 @@ const Control = () => {
           size={21}
           onClick={() => {
             if (!currentMusic) return;
-            if (!currentMusic?.musicObject?.progressRef) {
-              currentMusic?.musicObject?.init?.({
-                progressRef,
-                progressBgRef,
-                timeProgressRef,
-                visualStageRef,
-              });
+            if (
+              !currentMusic?.musicObject
+                ?.progressRef
+            ) {
+              currentMusic?.musicObject?.init?.(
+                {
+                  progressRef,
+                  progressBgRef,
+                  timeProgressRef,
+                  visualStageRef,
+                  lyricStageRef,
+                }
+              );
             }
             if (play === null) {
-              currentMusic?.musicObject?.jump(0, 0);
+              currentMusic?.musicObject?.jump(
+                0,
+                0
+              );
             } else {
               currentMusic?.musicObject?.continueplay();
             }

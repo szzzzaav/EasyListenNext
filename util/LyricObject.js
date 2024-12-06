@@ -15,19 +15,26 @@ export class lyricObject {
   //偏移量
   offset;
   ////////////
-  constructor({ text, lyricStageRef, offset, id }) {
+  constructor({
+    text,
+    lyricStageRef,
+    offset,
+    id,
+  }) {
     this.lyricText = text.split("[");
     this.lyricText.forEach((el) => {
       el = el.replace("[", "");
       el = el.split("]");
-      let time = this.timeFormat(el[0]) / 1000;
+      let time =
+        this.timeFormat(el[0]) / 1000;
       if (time && el[1]) {
         this.lrcTime.push(time);
         this.lrcContent.push(el[1]);
       }
     });
     this.lrcstageRef = lyricStageRef;
-    this.lrcstage = lyricStageRef?.current;
+    this.lrcstage =
+      lyricStageRef?.current;
     this.offset = offset ? offset : 0;
     this.last = null;
     this.id = id;
@@ -38,7 +45,13 @@ export class lyricObject {
       let timeArr = time.split(":");
       if (timeArr[2].length > 2) {
         timeArr[2] =
-          Math.floor(Number(timeArr[2])) / Math.pow(10, timeArr[2].length - 2);
+          Math.floor(
+            Number(timeArr[2])
+          ) /
+          Math.pow(
+            10,
+            timeArr[2].length - 2
+          );
       }
       let totalTime =
         Number(timeArr[2]) +
@@ -52,25 +65,52 @@ export class lyricObject {
       rr = this.lrcTime.length - 1;
     while (ll < rr) {
       let mid = (ll + rr + 1) >> 1;
-      if (this.lrcTime[mid] > time) rr = mid - 1;
+      if (this.lrcTime[mid] > time)
+        rr = mid - 1;
       else ll = mid;
     }
     return ll;
   }
-  showlryonlrcstage(time, className) {
+  showlryonlrcstage(
+    time,
+    className,
+    smooth = true
+  ) {
     if (!this.lrcTime?.length) return;
-    let index = this.binarySearch(time) + this.offset;
-    if (!this.lrcstage.childNodes[index]?.classList?.contains(`${className}`)) {
-      this.lrcstage.childNodes[index].classList.add(`${className}`);
-      this.lrcstage.childNodes[index].scrollIntoView({
-        behavior: "smooth",
+    let index =
+      this.binarySearch(time) +
+      this.offset;
+    if (
+      !this.lrcstage.childNodes[
+        index
+      ]?.classList?.contains(
+        `${className}`
+      )
+    ) {
+      this.lrcstage.childNodes[
+        index
+      ].classList.add(`${className}`);
+      this.lrcstage.childNodes[
+        index
+      ].scrollIntoView({
+        behavior: smooth
+          ? "smooth"
+          : "auto",
         block: "center",
       });
     }
-    for (let i = -this.len; i <= this.len; i++) {
+    for (
+      let i = -this.len;
+      i <= this.len;
+      i++
+    ) {
       if (
-        this.lrcstage.childNodes[index + i] &&
-        !this.lrcstage.childNodes[index + i].style.animation
+        this.lrcstage.childNodes[
+          index + i
+        ] &&
+        !this.lrcstage.childNodes[
+          index + i
+        ].style.animation
       ) {
         this.lrcstage.childNodes[
           index + i
@@ -79,19 +119,46 @@ export class lyricObject {
         }s cubic-bezier(0.315, 0.005, 0.000, 1.005) forwards`;
       }
     }
-    for (let i = 0; i < this.lrcstage.childNodes.length; i++) {
-      if (!this.lrcstage.childNodes[i] || !this.lrcstage.childNodes[i].style)
+    for (
+      let i = 0;
+      i <
+      this.lrcstage.childNodes.length;
+      i++
+    ) {
+      if (
+        !this.lrcstage.childNodes[i] ||
+        !this.lrcstage.childNodes[i]
+          .style
+      )
         continue;
       if (i === index) continue;
-      let el = this.lrcstage.childNodes[i];
-      if (el && el.classList.contains(`${className}`))
-        el.classList.remove(`${className}`);
+      let el =
+        this.lrcstage.childNodes[i];
+      if (
+        el &&
+        el.classList.contains(
+          `${className}`
+        )
+      )
+        el.classList.remove(
+          `${className}`
+        );
     }
     if (this.last !== index) {
       this.last = index;
-      for (let i = -this.len; i <= this.len; i++) {
-        if (this.lrcstage.childNodes[index + i]?.style.animation) {
-          this.lrcstage.childNodes[index + i].style.animation = "";
+      for (
+        let i = -this.len;
+        i <= this.len;
+        i++
+      ) {
+        if (
+          this.lrcstage.childNodes[
+            index + i
+          ]?.style.animation
+        ) {
+          this.lrcstage.childNodes[
+            index + i
+          ].style.animation = "";
         }
       }
     }
