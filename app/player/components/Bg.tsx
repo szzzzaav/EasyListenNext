@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import {
   useEffect,
   useRef,
+  useCallback,
 } from "react";
 const Bg = () => {
   const { color } = useAudioContext();
@@ -26,7 +27,7 @@ const Bg = () => {
     ? "from-[#bc3e07] to-[#7e1b0c]"
     : "";
 
-  const move = () => {
+  const move = useCallback(() => {
     curX.current +=
       (tgX.current - curX.current) *
       0.2;
@@ -39,7 +40,7 @@ const Bg = () => {
       curY.current
     )}px)`;
     requestAnimationFrame(move);
-  };
+  }, []);
   useEffect(() => {
     const handleMouseMove = (
       e: MouseEvent
@@ -58,7 +59,7 @@ const Bg = () => {
         handleMouseMove
       );
     };
-  }, []);
+  }, [move]);
   return (
     <>
       <div
