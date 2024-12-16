@@ -66,19 +66,23 @@ const Bg = () => {
           "gradient-bg absolute left-0 top-0 overflow-hidden h-[100vh] w-[100vw] bg-gradient-to-br from-indigo-600 transition-all to-orange-600 -z-50",
           className
         )}
+        style={{
+          backfaceVisibility: "hidden",
+          transformStyle: "preserve-3d",
+        }}
       >
         <svg xmlns="http://www.w3.org/2000/svg">
           <defs>
             <filter id="goo">
               <feGaussianBlur
                 in="SourceGraphic"
-                stdDeviation="20"
+                stdDeviation="15"
                 result="blur"
               ></feGaussianBlur>
               <feColorMatrix
                 in="blur"
                 mode="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -9"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 30 -10"
                 result="goo"
               ></feColorMatrix>
               <feBlend
@@ -86,6 +90,11 @@ const Bg = () => {
                 in2="goo"
                 mode="soft-light"
               ></feBlend>
+              <feComposite
+                in="SourceGraphic"
+                in2="goo"
+                operator="atop"
+              />
             </filter>
           </defs>
         </svg>
@@ -93,7 +102,14 @@ const Bg = () => {
           className="gradient-container w-full h-full"
           style={{
             filter:
-              "url(#goo) blur(40px)",
+              "url(#goo) blur(100px) contrast(105%)",
+            backfaceVisibility:
+              "hidden",
+            transformStyle:
+              "preserve-3d",
+            mixBlendMode: "normal",
+            isolation: "isolate",
+            contain: "paint",
           }}
         >
           <div
